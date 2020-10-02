@@ -6,20 +6,20 @@ body {
 body {
     font-size: 1.1em;
     line-height: 1.5;
-    color: lavenderblush;
+    color: rgb(48, 46, 47);
     margin: 0;
     background-color: #d5f4e6;
 }
 
   
 .homeImg {
-    background-image: url("../images/louis-hansel-shotsoflouis-Kix0S25vJEo-unsplash.jpg");
+    background-image: url("../images/coronavirus.jfif");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
     height: 100vh;
-
+    padding: 10px;
 }
 
 .homeText {
@@ -32,10 +32,32 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.buttonContainer {
-    display: flex;
-}
-
-.buttonContainer > div {
-    flex: 1;
-}
+.u-full-width {
+    width: 100%;
+    box-sizing: border-box; }
+  
+  .u-max-full-width {
+    max-width: 100%;
+    box-sizing: border-box; }
+  
+  .u-pull-right {
+    float: right; }
+  
+  .u-pull-left {
+    float: left; }
+    
+.card {
+    text-align: center;
+    border-radius: 6px;
+    background-color: #fff;
+    border: solid 2px #f0dce5;
+    padding: 20px;
+    margin-bottom: 24px; }
+    .card img {
+      border-radius: 4px;
+      margin-bottom: 2.25rem;
+      cursor: pointer;
+      width: 100%; }
+    .card p {
+      font-size: 1.8rem;
+      margin-bottom: 1rem; }
