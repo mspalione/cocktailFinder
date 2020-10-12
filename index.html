@@ -4,20 +4,24 @@
   <title>Covid-19 Updates</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="css/style.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="homeImg">
-        <div class="homeText">
-            <h1>Covid-19 Stats</h1>
-            
-        </div>
-    </div>
-    <div>
-      <label for="countries">Select a Country</label>
-      <select class="u-full-width" id="countries"></select>
-      <div class="card"></div>
-    </div>
+  <div class="homeImg">
+      <div class="homeText">
+          <h1>Covid-19 Stats</h1>
+          
+      </div>
+  </div>
+  <div id="dropDown">
+    <label for="countries">Select a Country</label>
+    <select class="u-full-width" id="countries"></select>
+    <div class="card"></div>
+  </div>
+  <div id="error"></div>
+  <div class="globe">
+    <img src="images/globe.gif" alt="spinning globe" width="400" height="400">
+  </div>
   <script src="js/app.js"></script>
 </body>
 </html>

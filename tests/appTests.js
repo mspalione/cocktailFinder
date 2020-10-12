@@ -1,1 +1,1 @@
-//returns json
+//returns js
