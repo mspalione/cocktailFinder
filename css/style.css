@@ -6,7 +6,7 @@ body {
 body {
     font-size: 1.1em;
     line-height: 1.5;
-    color: rgb(48, 46, 47);
+    color: #302E2F;
     margin: 0;
     background-color: #659DBD;
 }
@@ -47,9 +47,15 @@ body {
   
   .u-pull-left {
     float: left; }
-    
+   
+.stats {
+  display: flex;
+}    
+
 .card {
     text-align: center;
+    color: #302E2F;
+    text-shadow: 0 0 10px #fff;
     border-radius: 6px;
     background-color: #659DBD;
     padding: 20px;
