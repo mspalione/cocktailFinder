@@ -9,11 +9,12 @@ const apiheaders = { headers: {
     'useQueryString': true
 }}
 const countries = document.getElementById('countries')
-const stats = document.querySelector('.stats')
 const card = document.querySelector('.card')
 const graph = document.querySelector('.graph')
 const error = document.getElementById('error')
 const dropDown = document.getElementById('dropDown')
+const details = document.getElementById('details')
+let chart
 
 
 
@@ -24,7 +25,7 @@ let countryStats = () => {
         .then(data => {
             const countryData = data.response[0]
 
-            let country = {
+            country = {
                 continent: countryData.continent === null ? 'unknown' : countryData.continent,
                 country: countryData.country === null ? 'unknown' : countryData.country,
                 day: countryData.day === null ? 'unknown' : countryData.day,
@@ -37,18 +38,28 @@ let countryStats = () => {
                 recoveredCases: countryData.cases.recovered === null ? 'unknown' : countryData.cases.recovered,
                 totalCases: countryData.cases.total === null ? 'unknown' : countryData.cases.total
             }
-//change function to return country. Create new functions for using the data inside country object.
-            let title = `
-            <div>
-                <h1>Covid Case Statistics for the country of ${country.country} in the continent of ${country.continent}</h1>
-            </div>
-            `
+            
+            createHtml(country)
 
+            makeAGraph([
+                {x: "Population Without Covid Diagnosis", value: difference(parseInt(country.population), parseInt(country.totalCases))},
+                {x: "Population With Covid Diagnosis", value: parseInt(country.totalCases)}
+              ], `Percentage of ${country.country}'s Population With Positive Covid Diagnosis`, document.getElementById('one'))
+
+            makeAGraph([
+                {x: "Total Deaths", value: parseInt(country.deaths)},
+                {x: "Active Cases", value: parseInt(country.activeCases)},
+                {x: "Recovered Cases", value: parseInt(country.recoveredCases)}
+              ], `Breakdown of Total Positive Covid Cases in ${country.country}`, document.getElementById('two'))
+        })
+}
+
+let createHtml = (country) => {
             let html = `
                 <div>
                     <h1>Covid Case Statistics for the country of ${country.country} in the continent of ${country.continent}</h1>
                     <h3>Population: ${country.population}</h3>
-                    <h3>Statistics as of ${country.day}</h3>
+                    <h3>Statistics as of: ${country.day}</h3>
                     <h3>Total Tests Given: ${country.tests}</h3>
                     <h3>Total Positive Cases: ${country.totalCases}</h3>
                     <h3>Total Deaths: ${country.deaths}</h3>
@@ -59,11 +70,23 @@ let countryStats = () => {
                 </div>
             `
 
-            stats.innterHTML = title
-            card.innerHTML = html
-        })
+            details.innerHTML = html
 }
 
+let makeAGraph = (data, title, container) => {
+    container.innerHTML = '' // reset div to prevent multiple graphs from populating
+    let div = document.createElement("div")
+    div.style.height = '90%'
+    let newContainer = container.appendChild(div)
+    chart = anychart.pie3d(data)
+    chart.innerRadius("50%")
+    chart.labels().position("outside")
+    chart.title(title)
+    chart.container(newContainer)
+    chart.draw()
+}
+
+let difference = (x, y) => x-y
 
 let countryList = (data) => {
     let options = data.response.map(item => `
@@ -92,10 +115,3 @@ let getCountries = getJson(countriesUrl, apiheaders)
 
 getCountries  
 countries.addEventListener('change', countryStats)            
-
-module.exports = {
-    statusCheck: statusCheck,
-    countryList: countryList,
-    getJson: getJson,
-    countryStats: countryStats
-}

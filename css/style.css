@@ -50,7 +50,21 @@ body {
    
 .stats {
   display: flex;
+  flex-direction: column;
 }    
+
+.graph {
+  flex: 1;
+  border: solid;
+  border-color: #659DBD;
+}
+
+#one, #two {
+  height: 48%;
+  border: solid;
+  border-color: #659DBD;
+  padding: .5%;
+}
 
 .card {
     text-align: center;
@@ -61,6 +75,7 @@ body {
     padding: 20px;
     margin-bottom: 24px; 
     min-height: 550px;
+    flex: 1;
   }
 
 .globe {
@@ -73,4 +88,10 @@ body {
       margin-left: auto;
       margin-right: auto;
       width: 50%;
+  }
+
+  @media screen and (min-width: 900px) {
+    .stats {
+      flex-direction: row;
+    }
   }
