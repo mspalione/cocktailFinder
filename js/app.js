@@ -5,7 +5,7 @@ const statisticsUrl = `https://${host}/statistics`
 const countriesUrl = `https://${host}/countries`
 const apiheaders = { headers: {
     'x-rapidapi-host': host,
-    'x-rapidapi-key': '', //input your api key
+    'x-rapidapi-key': 'f1a6ae16ccmsh20449871d55de20p1ff8e7jsnd50eab233b5a', //input your api key
     'useQueryString': true
 }}
 const countries = document.getElementById('countries')
@@ -87,3 +87,10 @@ let getCountries = getJson(countriesUrl, apiheaders)
 
 getCountries  
 countries.addEventListener('change', countryStats)            
+
+module.exports = {
+    statusCheck: statusCheck,
+    countryList: countryList,
+    getJson: getJson,
+    countryStats: countryStats
+}
