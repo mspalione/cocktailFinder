@@ -34,23 +34,16 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.u-full-width {
-    width: 100%;
-    box-sizing: border-box; }
-  
-  .u-max-full-width {
-    max-width: 100%;
-    box-sizing: border-box; }
-  
-  .u-pull-right {
-    float: right; }
-  
-  .u-pull-left {
-    float: left; }
+.details {
+  text-align: center;
+  font-size: 1.3em;
+  font-family: 'Lora', serif;
+  text-shadow: 0 0 10px #fff;
+}
    
 .stats {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
 }    
 
 .graph {

@@ -5,15 +5,15 @@ const statisticsUrl = `https://${host}/statistics`
 const countriesUrl = `https://${host}/countries`
 const apiheaders = { headers: {
     'x-rapidapi-host': host,
-    'x-rapidapi-key': '', //input your api key
+    'x-rapidapi-key': 'f1a6ae16ccmsh20449871d55de20p1ff8e7jsnd50eab233b5a', //input your api key
     'useQueryString': true
 }}
 const countries = document.getElementById('countries')
 const card = document.querySelector('.card')
 const graph = document.querySelector('.graph')
+const title = document.querySelector('.title')
 const error = document.getElementById('error')
 const dropDown = document.getElementById('dropDown')
-const details = document.getElementById('details')
 let chart
 
 
@@ -55,9 +55,12 @@ let countryStats = () => {
 }
 
 let createHtml = (country) => {
-            let html = `
+    let titleLabel = `
+        <h2>Covid Case Statistics for the country of ${country.country} in the continent of ${country.continent}</h2>
+    `        
+    
+    let html = `
                 <div>
-                    <h1>Covid Case Statistics for the country of ${country.country} in the continent of ${country.continent}</h1>
                     <h3>Population: ${country.population}</h3>
                     <h3>Statistics as of: ${country.day}</h3>
                     <h3>Total Tests Given: ${country.tests}</h3>
@@ -70,7 +73,8 @@ let createHtml = (country) => {
                 </div>
             `
 
-            details.innerHTML = html
+            title.innerHTML = titleLabel
+            card.innerHTML = html
 }
 
 let makeAGraph = (data, title, container) => {
