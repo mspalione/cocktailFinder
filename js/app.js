@@ -26,17 +26,18 @@ let countryStats = () => {
             const countryData = data.response[0]
 
             country = {
-                continent: countryData.continent === null ? 'unknown' : countryData.continent,
-                country: countryData.country === null ? 'unknown' : countryData.country,
-                day: countryData.day === null ? 'unknown' : countryData.day,
-                deaths: countryData.deaths.total === null ? 'unknown' : countryData.deaths.total,
-                population: countryData.population === null ? 'unknown' : countryData.population,
-                tests: countryData.tests.total === null ? 'unknown' : countryData.tests.total,
-                newCases: countryData.cases.new === null ? 'unknown' : countryData.cases.new,
-                activeCases: countryData.cases.active === null ? 'unknown' : countryData.cases.active,
-                criticalCases: countryData.cases.critical === null ? 'unknown' : countryData.cases.critical,
-                recoveredCases: countryData.cases.recovered === null ? 'unknown' : countryData.cases.recovered,
-                totalCases: countryData.cases.total === null ? 'unknown' : countryData.cases.total
+                continent: countryData.continent || 'unknown',
+                continent: countryData.continent || 'unknown',
+                country: countryData.country || 'unknown',
+                day: countryData.day || 'unknown',
+                deaths: countryData.deaths.total || 'unknown',
+                population: countryData.population || 'unknown',
+                tests: countryData.tests.total || 'unknown',
+                newCases: countryData.cases.new || 'unknown',
+                activeCases: countryData.cases.active || 'unknown',
+                criticalCases: countryData.cases.critical || 'unknown',
+                recoveredCases: countryData.cases.recovered || 'unknown',
+                totalCases: countryData.cases.total || 'unknown'
             }
             
             createHtml(country)
