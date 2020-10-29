@@ -6,14 +6,28 @@
   <link href="css/style.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
   <script src="https://cdn.anychart.com/releases/8.9.0/js/anychart-core.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.9.0/js/anychart-pie.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.9.0/js/anychart-map.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-data-adapter.min.js"></script>
+  <script src="https://cdn.anychart.com/geodata/latest/custom/world/world.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"></script>
+  <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+  <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
 </head>
 <body>
   <div class="homeImg">
       <div class="homeText">
-          <h1>Covid-19 Stats</h1>
-          
+          <h1>Covid-19</h1>
+          <h2>At a Glance</h2>
       </div>
+  </div>
+  <div class="map">
+    <h3>Covid Across the World</h3>
+    <div id="world">
+    </div>
   </div>
   <div id="dropDown">
     <div class="details">
@@ -34,5 +48,6 @@
     <img src="images/globe.gif" alt="spinning globe" width="400" height="400">
   </div>
   <script src="js/app.js"></script>
+ <script src="js/countryIds.js"></script>  <!-- type="module" -->
 </body>
 </html>

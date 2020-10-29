@@ -24,14 +24,33 @@ body {
 }
 
 .homeText {
-    font-family: 'Lora', serif;
-    text-shadow: 0 0 10px #fff;
-    font-size: 3em;
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  font-family: 'Lora', serif;
+  text-shadow: 0 0 10px #fff;
+  font-size: 3em;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.map {
+  /* width: 100%;
+  height: 100vh; */
+  background-color: rgb(25, 62, 87);
+  font-family: 'Lora', serif;
+  text-shadow: 0 0 10px #fff;
+  font-size: 2em;
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+#world {
+  height: 100vh;
+}
+
+#dropDown {
+  padding: 1em;
 }
 
 .details {
