@@ -5,9 +5,7 @@ Switched to https://rapidapi.com/api-sports/api/covid-193 10/1.
 
 Integrating css and js from other folders into the html.
 
-You will need to get your API key following the covid link above. Scroll down on the page. You will find the free api key there. Copy and paste into app.js on line 14 inside the const apiheaders.
-
-Initially planned to include unit testing but found it difficult to test with api and significant use of the dom in my functions without relying on external helpers so opted to not include tests at this time.
+API key provided. To get your own, follow the covid link above. Scroll down on the page. Register and you will find the free api key there. Copy and paste into app.js on line 14 inside the const apiheaders.
 
 Features include:
 
@@ -23,3 +21,6 @@ Features include:
 
 ~Visualize data in a graph, chart, or other visual representation of data [ Two doughnut charts visualize the data returned for the country's covid statistics ]
 
+*Brought in data to match country code with the related country via api and using .find on the returned array. Created sterilized data in countryIds.js for use with the country codes that did not have a matching country due to spelling and styling differences between the two data sets such as hyphens and spaces.
+
+*Use of https://www.anychart.com/ to create map and pie charts with an external data source.
