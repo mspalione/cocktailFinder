@@ -1,11 +1,9 @@
-//input required api key for code to work. See Readme for instructions on obtaining api key.
-//import countryIds from 'countryIds.js'
 const host =  'covid-193.p.rapidapi.com' 
 const statisticsUrl = `https://${host}/statistics`
 const countriesUrl = `https://${host}/countries`
 const apiheaders = { headers: {
     'x-rapidapi-host': host,
-    'x-rapidapi-key': 'f1a6ae16ccmsh20449871d55de20p1ff8e7jsnd50eab233b5a', //input your api key
+    'x-rapidapi-key': 'f1a6ae16ccmsh20449871d55de20p1ff8e7jsnd50eab233b5a', 
     'useQueryString': true
 }}
 const countries = document.getElementById('countries')
@@ -17,6 +15,9 @@ const dropDown = document.getElementById('dropDown')
 const map = anychart.map();
 let chart
 let clickedCountry
+let selectedCountry
+let data
+let series
 
 
 let createHtml = (country) => {
@@ -83,8 +84,7 @@ let getCountries = getJson(countriesUrl, apiheaders)
                     .then(data => countryList(data))     
 
 let countryStats = () => {
-    const selectedCountry = countries.value 
-    series2(selectedCountry)
+    selectedCountry = countries.value 
     
     getJson(`${statisticsUrl}?country=${selectedCountry}`, apiheaders)
         .then(data => {
@@ -110,7 +110,7 @@ let countryStats = () => {
             makeAGraph([
                 {x: "Population Without Covid Diagnosis", value: difference(parseInt(country.population), parseInt(country.totalCases))},
                 {x: "Population With Covid Diagnosis", value: parseInt(country.totalCases)}
-              ], `Percentage of ${country.country}'s Population With Positive Covid Diagnosis`, document.getElementById('one'))
+              ], `Percentage of ${country.country}'s Population That Has Had a Positive Covid Diagnosis`, document.getElementById('one'))
 
             makeAGraph([
                 {x: "Total Deaths", value: parseInt(country.deaths)},
@@ -120,65 +120,62 @@ let countryStats = () => {
         })
 }
 
-countries.addEventListener('change', countryStats)  
-
 const countryCodes = fetch('https://cdn.anychart.com/samples/maps-choropleth/world-governments-map/data.json')
-                   .then(res => res.json())
+                        .then(res => res.json())
           
 //dataset for map
 const worldStats = getJson(statisticsUrl, apiheaders)
-                .then(data => data.response)
-                .then(async res => {
-                    const countryCode = await countryCodes
-                    let country
-                    let obj
-                    let arr = [
-                        {
-                            "id":"Somaliland",
-                            "value": 0
-                        },
-                        {
-                            "id":"TM",
-                            "value": 0
-                        },
-                        {
-                            "id":"KP",
-                            "value": 0
-                        }
-                    ]
-
-                    for (var r of res) {
-                        country = countryCode.find(item => item.name === r.country)
-                        if(!country) 
-                            country = countryIds.find(item => item.country === r.country)                        
-
-                        if(country) {
-                            obj = {
-                                "id":country.id,
-                                "value": r.cases.total,
-                                "country":r.country,
-                                "deaths": r.deaths.total,
-                                "population": r.population
+                    .then(data => data.response)
+                    .then(async res => {
+                        const countryCode = await countryCodes
+                        let country
+                        let obj
+                        let arr = [
+                            {
+                                "id":"Somaliland",
+                                "value": 0
+                            },
+                            {
+                                "id":"TM",
+                                "value": 0
+                            },
+                            {
+                                "id":"KP",
+                                "value": 0
                             }
-                            
-                            arr.push(obj)
-                        }
-                    }
-                    
-                    return arr
-                })
+                        ]
 
-let series2 = async (selectedCountry) => {
-    const data = await worldStats
-    const countryToHighlight = data.find(item => item.country === selectedCountry)
-    secondSeries = map.choropleth(countryToHighlight)
-    debugger
-    secondSeries.fill('#302E2F')
-}                
+                        for (var r of res) {
+                            country = countryCode.find(item => item.name === r.country)
+                            if(!country) 
+                                country = countryIds.find(item => item.country === r.country)                        
+
+                            if(country) {
+                                obj = {
+                                    "id":country.id,
+                                    "value": r.cases.total,
+                                    "country":r.country,
+                                    "deaths": r.deaths.total,
+                                    "population": r.population,
+                                    "active": r.active,
+                                    "activeP": (parseInt(r.active) / parseInt(r.population)) * 100,
+                                    "deathP": (parseInt(r.deaths.total) / parseInt(r.population)) * 100,
+                                    "totalP": (parseInt(r.cases.total) / parseInt(r.population)) * 100
+                                }
+                                
+                                arr.push(obj)
+                            }
+                        }
+                        
+                        return arr
+                })               
+
+
+    
 
 //create interactive map utilizing anychart.com
 anychart.onDocumentReady(async function () {
-    const data = await worldStats
+    data = await worldStats
     
     map.geoData(anychart.maps.world);
     map.colorRange(true)
@@ -191,10 +188,10 @@ anychart.onDocumentReady(async function () {
                 <span style="font-size: 14px; color: #302E2F;">Grouped by 1,000,000<br/></span> 
                 <span style="font-size: 14px; color: #302E2F;">Double Click on a Country to See the Full Stats List Below</span>`)
 
-    let series = map.choropleth(data);
-    //series.colorScale(anychart.scales.linearColor('#81d4fa', '#014377'));
+    series = map.choropleth(data);
     series.hovered().fill('#302E2F')
 
+    //set the scale and matching colors
     let scale = anychart.scales.ordinalColor([
          { from: 0, to: 0}
         ,{ from: 1, to: 1000000 }
@@ -243,9 +240,6 @@ anychart.onDocumentReady(async function () {
             return this.value === 0 ? noData : dataDisplay
     })    
 
-    
-    
-    
     //Trigger countryStats to match stats list to country selected in map
     map.listen('dblclick', function () {
         countries.value = clickedCountry.getData('country')
@@ -256,4 +250,16 @@ anychart.onDocumentReady(async function () {
     map.container('world')
     map.draw()
   });         
-          
+
+//darkens the selected country in the map
+let highlight = () => {
+    series.unselect()
+    let dataIndex = data.findIndex(s => s.country === selectedCountry)
+    series.select(dataIndex)
+}   
+
+countries.addEventListener('change', () => {
+    countryStats()
+    highlight()
+})
+
