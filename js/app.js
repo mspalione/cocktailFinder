@@ -10,6 +10,8 @@ const countries = document.getElementById('countries')
 const card = document.querySelector('.card')
 const graph = document.querySelector('.graph')
 const title = document.querySelector('.title')
+const high = document.getElementById('high')
+const low = document.getElementById('low')
 const error = document.getElementById('error')
 const dropDown = document.getElementById('dropDown')
 const map = anychart.map();
@@ -18,6 +20,9 @@ let clickedCountry
 let selectedCountry
 let data
 let series
+let activeCasePercent = []
+let deathPercent = []
+let totalPercent = []
 
 
 let createHtml = (country) => {
@@ -81,7 +86,7 @@ let countryList = (data) => {
 }
 
 let getCountries = getJson(countriesUrl, apiheaders) 
-                    .then(data => countryList(data))     
+    .then(data => countryList(data))     
 
 let countryStats = () => {
     selectedCountry = countries.value 
@@ -121,57 +126,97 @@ let countryStats = () => {
 }
 
 const countryCodes = fetch('https://cdn.anychart.com/samples/maps-choropleth/world-governments-map/data.json')
-                        .then(res => res.json())
+    .then(res => res.json())
+
+let sortArray = (arrayToSort) => {
+    let topActiveP = [...arrayToSort].sort((a, b) => b.activeP - a.activeP).slice(0, 6)
+    let lowActiveP = [...arrayToSort].sort((a, b) => a.activeP - b.activeP).slice(0, 6)
+    let i = 0
+    let topHtml = ''
+    topActiveP.forEach(item => {
+        i++
+        topHtml +=  `
+        <div>
+            <h3>${i}) ${item.country}, ${item.continent}<h3>
+            <h4 style='padding-left: 2em;'>Active Cases: ${item.activeP || 'unknown '}%</h4> 
+            <h4 style='padding-left: 2em;'>Total Deaths: ${item.deathP || 'unknown '}%</h4>
+            <h4 style='padding-left: 2em;'>Total Cases: ${item.totalP || 'unknown '}%</h4>
+        </div>
+        `
+    })
+   
+    high.innerHTML = topHtml
+
+    i = 0
+    let lowHtml = ''
+    lowActiveP.forEach(item => {
+        i++
+        lowHtml += `
+        <div>
+            <h3>${i}) ${item.country}, ${item.continent}<h3>
+            <h4 style='padding-left: 2em;'>Active Cases: ${item.activeP || 'unknown '}%</h4> 
+            <h4 style='padding-left: 2em;'>Total Deaths: ${item.deathP || 'unknown '}%</h4>
+            <h4 style='padding-left: 2em;'>Total Cases: ${item.totalP || 'unknown '}%</h4>
+        </div>
+        `
+    })
+
+    low.innerHTML = lowHtml
+}
           
+const getPercentage = (a, b) => {
+    let answer = (a / b) * 100
+    return answer.toFixed(2)
+}
+
 //dataset for map
 const worldStats = getJson(statisticsUrl, apiheaders)
-                    .then(data => data.response)
-                    .then(async res => {
-                        const countryCode = await countryCodes
-                        let country
-                        let obj
-                        let arr = [
-                            {
-                                "id":"Somaliland",
-                                "value": 0
-                            },
-                            {
-                                "id":"TM",
-                                "value": 0
-                            },
-                            {
-                                "id":"KP",
-                                "value": 0
-                            }
-                        ]
+    .then(data => data.response)
+    .then(async res => {
+        const countryCode = await countryCodes
+        let country
+        let obj
+        let arr = [
+            {
+                "id":"Somaliland",
+                "value": 0
+            },
+            {
+                "id":"TM",
+                "value": 0
+            },
+            {
+                "id":"KP",
+                "value": 0
+            }
+        ]
 
-                        for (var r of res) {
-                            country = countryCode.find(item => item.name === r.country)
-                            if(!country) 
-                                country = countryIds.find(item => item.country === r.country)                        
+        for (var r of res) {
+            country = countryCode.find(item => item.name === r.country)
+            if(!country) 
+                country = countryIds.find(item => item.country === r.country)                        
 
-                            if(country) {
-                                obj = {
-                                    "id":country.id,
-                                    "value": r.cases.total,
-                                    "country":r.country,
-                                    "deaths": r.deaths.total,
-                                    "population": r.population,
-                                    "active": r.active,
-                                    "activeP": (parseInt(r.active) / parseInt(r.population)) * 100,
-                                    "deathP": (parseInt(r.deaths.total) / parseInt(r.population)) * 100,
-                                    "totalP": (parseInt(r.cases.total) / parseInt(r.population)) * 100
-                                }
-                                
-                                arr.push(obj)
-                            }
-                        }
-                        
-                        return arr
-                })               
+            if(country) {
+                obj = {
+                    "id":country.id,
+                    "value": r.cases.total,
+                    "country":r.country,
+                    "deaths": r.deaths.total,
+                    "population": r.population,
+                    "active": r.cases.active
+                }
+                arr.push(obj)
+            }
+            
+            if(r.cases.active && r.population) r.activeP = getPercentage(parseInt(r.cases.active), parseInt(r.population))
+            if(r.deaths.total && r.population) r.deathP = getPercentage(parseInt(r.deaths.total), parseInt(r.population))
+            if(r.cases.total && r.population) r.totalP = getPercentage(parseInt(r.cases.total), parseInt(r.population))
+        }
 
+        sortArray(res)
 
-    
+        return arr
+})    
 
 //create interactive map utilizing anychart.com
 anychart.onDocumentReady(async function () {
@@ -249,7 +294,7 @@ anychart.onDocumentReady(async function () {
     //set where to put map in html via id
     map.container('world')
     map.draw()
-  });         
+});         
 
 //darkens the selected country in the map
 let highlight = () => {
@@ -262,4 +307,3 @@ countries.addEventListener('change', () => {
     countryStats()
     highlight()
 })
-
